@@ -18,7 +18,7 @@ import java.util.Date;
 public class Product {
     @Id // This annotation specifies the primary key of an entity.
     @GeneratedValue(strategy = GenerationType.IDENTITY) // This annotation provides for the specification of generation strategies for the values of primary keys.
-    private int productId;
+    private Integer productId;
     private String name;
     private double price;
     private String brand;
