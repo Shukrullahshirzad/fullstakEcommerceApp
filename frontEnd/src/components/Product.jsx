@@ -1,16 +1,18 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { useState } from "react";
-import AppContext from "../Context/Context";
+import AppContext from "../Context/Context"; // Context means the global state of the application. Like Redux but in a simpler way.
+// We can use Context to share data between components without having to pass props down manually at every level.
 import axios from "../axios";
 import UpdateProduct from "./UpdateProduct";
 const Product = () => {
-  const { id } = useParams();
+  const { id } = useParams(); // userParams is a hook that allows us to access the parameters of the current route.
   const { data, addToCart, removeFromCart, cart, refreshData } =
-    useContext(AppContext);
+    useContext(AppContext); // useContext is a hook that allows us to access the context of the application.
+ 
   const [product, setProduct] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // useNavigate is a hook that allows us to navigate to different routes programmatically.
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -106,7 +108,7 @@ const Product = () => {
             </p>
           </div>
           <div className="update-button ">
-            <button
+            <button 
               className="btn btn-primary"
               type="button"
               onClick={handleEditClick}
