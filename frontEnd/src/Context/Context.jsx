@@ -60,7 +60,23 @@ export const AppProvider = ({ children }) => {
   const refreshData = async () => {
     try {
       const response = await axios.get("/products"); // GET /products endpoint
-      setData(response.data); // store the returned data (expected to be an array) in state
+      // map backend Product fields to the shape the frontend expects:
+      // backend: productId, name, price, brand, available, stockQuantity, category, description
+      // frontend components expect: id, name, price, brand, productAvailable, quantity, category, description
+      const normalized = (response.data || []).map((p) => ({
+        id: p.productId ?? p.id, // prefer productId from backend, fall back to id
+        name: p.name,
+        price: p.price,
+        brand: p.brand,
+        description: p.description,
+        category: p.category,
+        productAvailable: p.available ?? p.productAvailable ?? true, // normalize availability flag
+        quantity: p.stockQuantity ?? p.quantity ?? 0, // normalize stock/quantity field
+        imageName: p.imageName ?? null, // preserve any imageName if backend provides one
+        // keep other backend fields if needed
+        ...p,
+      }));
+      setData(normalized); // store normalized data in state
     } catch (error) {
       setIsError(error.message); // capture and store any error message
     }

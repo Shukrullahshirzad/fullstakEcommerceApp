@@ -3,10 +3,10 @@ package com.shirzad.ecom_proj.controller;
 import com.shirzad.ecom_proj.model.Product;
 import com.shirzad.ecom_proj.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -31,7 +31,27 @@ public class ProductController {
     
     @GetMapping("/products")
     public List<Product> getProducts(){
+
         return productService.getAllProducts();
+    }
+
+    @GetMapping("product/{id}")
+    public Product getProductById(Integer id){
+
+        return productService.getProductById(id);
+    }
+
+    public ResponseEntity<?> addProduct(@RequestPart Product product,
+                                        @RequestPart MultipartFile imageFile){
+        try{
+
+        productService.addProduct(product, imageFile);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
     }
     
 }
